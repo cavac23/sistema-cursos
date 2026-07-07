@@ -186,6 +186,21 @@ function esCorreoInstructorITQ(correo) {
   return correo.trim().toLowerCase().endsWith(DOMINIO_INSTRUCTOR_ITQ);
 }
 
+function validarCorreo(correo) {
+  if (!validarTexto(correo)) {
+    return null;
+  }
+  const normalizado = correo.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizado)) {
+    return null;
+  }
+  return normalizado;
+}
+
+function validarContrasena(contrasena) {
+  return typeof contrasena === 'string' && contrasena.length >= 8;
+}
+
 function esRolRegistroPublico(rol) {
   return ROLES_REGISTRO_PUBLICO.includes(rol) || ROLES_LEGACY_REGISTRO.includes(rol);
 }
@@ -346,12 +361,23 @@ app.post('/api/registro', async (req, res) => {
       return res.status(400).json({ ok: false, mensaje: 'Rol no válido para registro público.' });
     }
 
-    if (rol === 'instructor' && !esCorreoInstructorITQ(correo)) {
+    const correoValidado = validarCorreo(correo);
+    if (!correoValidado) {
+      return res.status(400).json({ ok: false, mensaje: 'Ingrese un correo electrónico válido.' });
+    }
+
+    if (!validarContrasena(contrasena)) {
+      return res.status(400).json({ ok: false, mensaje: 'La contraseña debe tener al menos 8 caracteres.' });
+    }
+
+    if (rol === 'instructor' && !esCorreoInstructorITQ(correoValidado)) {
       return res.status(400).json({
         ok: false,
         mensaje: 'Solo los miembros del ITQ pueden registrarse como instructores.'
       });
     }
+
+    correo = correoValidado;
 
     const pool = await getPool();
 
@@ -364,7 +390,7 @@ app.post('/api/registro', async (req, res) => {
     }
 
     const existe = await pool.request()
-      .input('correo', sql.VarChar(120), correo.trim().toLowerCase())
+      .input('correo', sql.VarChar(120), correo)
       .query('SELECT id_usuario FROM Usuarios WHERE correo = @correo');
 
     if (existe.recordset.length > 0) {
@@ -376,7 +402,7 @@ app.post('/api/registro', async (req, res) => {
     await pool.request()
       .input('nombres', sql.VarChar(80), nombres.trim())
       .input('apellidos', sql.VarChar(80), apellidos.trim())
-      .input('correo', sql.VarChar(120), correo.trim().toLowerCase())
+      .input('correo', sql.VarChar(120), correo)
       .input('hash', sql.VarChar(255), hash)
       .input('idRol', sql.Int, rolResult.recordset[0].id_rol)
       .query(`
@@ -449,10 +475,26 @@ app.put('/api/perfil', requiereSesion, async (req, res) => {
       return res.status(400).json({ ok: false, mensaje: 'Nombre, apellido y correo son obligatorios.' });
     }
 
+    const correoValidado = validarCorreo(correo);
+    if (!correoValidado) {
+      return res.status(400).json({ ok: false, mensaje: 'Ingrese un correo electrónico válido.' });
+    }
+
+    if (req.session.usuario.rol === 'instructor' && !esCorreoInstructorITQ(correoValidado)) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Los instructores deben mantener un correo institucional @itq.edu.ec.'
+      });
+    }
+
+    if (validarTexto(contrasena) && !validarContrasena(contrasena)) {
+      return res.status(400).json({ ok: false, mensaje: 'La contraseña debe tener al menos 8 caracteres.' });
+    }
+
     const pool = await getPool();
 
     const correoExiste = await pool.request()
-      .input('correo', sql.VarChar(120), correo.trim().toLowerCase())
+      .input('correo', sql.VarChar(120), correoValidado)
       .input('idUsuario', sql.Int, req.session.usuario.id_usuario)
       .query('SELECT id_usuario FROM Usuarios WHERE correo = @correo AND id_usuario <> @idUsuario');
 
@@ -464,7 +506,7 @@ app.put('/api/perfil', requiereSesion, async (req, res) => {
       .input('idUsuario', sql.Int, req.session.usuario.id_usuario)
       .input('nombres', sql.VarChar(80), nombres.trim())
       .input('apellidos', sql.VarChar(80), apellidos.trim())
-      .input('correo', sql.VarChar(120), correo.trim().toLowerCase());
+      .input('correo', sql.VarChar(120), correoValidado);
 
     if (validarTexto(contrasena)) {
       const hash = await bcrypt.hash(contrasena, 10);
@@ -490,7 +532,7 @@ app.put('/api/perfil', requiereSesion, async (req, res) => {
 
     req.session.usuario.nombres = nombres.trim();
     req.session.usuario.apellidos = apellidos.trim();
-    req.session.usuario.correo = correo.trim().toLowerCase();
+    req.session.usuario.correo = correoValidado;
 
     res.json({ ok: true, mensaje: 'Datos actualizados correctamente.', usuario: req.session.usuario });
   } catch (error) {

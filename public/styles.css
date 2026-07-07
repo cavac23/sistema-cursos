@@ -773,6 +773,13 @@ body {
   padding: 8px;
 }
 
+.tarjeta.registro .campo-ayuda,
+.tarjeta.formulario .campo-ayuda {
+  font-size: 0.8rem;
+  color: #666;
+  margin: -6px 0 10px;
+}
+
 /* Mensaje de error */
 #error-instructor {
   color: white;

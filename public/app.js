@@ -372,6 +372,32 @@ function validarRegistroInstructor(datos) {
   }
 }
 
+function validarCorreoFormulario(correo) {
+  const normalizado = (correo || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizado)) {
+    throw new Error('Ingrese un correo electrónico válido.');
+  }
+  return normalizado;
+}
+
+function validarContrasenaFormulario(contrasena) {
+  if ((contrasena || '').length < 8) {
+    throw new Error('La contraseña debe tener al menos 8 caracteres.');
+  }
+}
+
+function validarCorreoInstructorPerfil(correo, rol) {
+  if (rol === 'instructor' && !esCorreoInstructorITQ(correo)) {
+    throw new Error('Los instructores deben mantener un correo institucional @itq.edu.ec.');
+  }
+}
+
+function validarDatosRegistro(datos) {
+  datos.correo = validarCorreoFormulario(datos.correo);
+  validarContrasenaFormulario(datos.contrasena);
+  validarRegistroInstructor(datos);
+}
+
 // ===== REGISTRO =====
 const formRegistro = document.getElementById('formRegistro');
 if (formRegistro) {
@@ -387,7 +413,7 @@ if (formRegistro) {
     };
 
     try {
-      validarRegistroInstructor(datos);
+      validarDatosRegistro(datos);
       const data = await consumirAPI('/api/registro', 'POST', datos);
       mostrarMensaje(data.mensaje, 'exito');
       formRegistro.reset();
@@ -450,6 +476,13 @@ if (formPerfil) {
     };
 
     try {
+      const rol = document.getElementById('perfilRol').value;
+      datos.correo = validarCorreoFormulario(datos.correo);
+      validarCorreoInstructorPerfil(datos.correo, rol);
+      if (datos.contrasena.trim()) {
+        validarContrasenaFormulario(datos.contrasena);
+      }
+
       const data = await consumirAPI('/api/perfil', 'PUT', datos);
       mostrarMensaje(data.mensaje, 'exito');
       document.getElementById('perfilContrasena').value = '';
@@ -537,7 +570,7 @@ if (formEstudiante) {
   contrasena: document.getElementById('contrasenaEst').value
 };
     try {
-      validarRegistroInstructor(datos);
+      validarDatosRegistro(datos);
       await consumirAPI('/api/registro', 'POST', datos);
       window.location.href = 'login.html';
     } catch (error) {
@@ -558,7 +591,7 @@ if (formInstructor) {
       contrasena: document.getElementById('contrasenaInst').value
     };
     try {
-      validarRegistroInstructor(datos);
+      validarDatosRegistro(datos);
       await consumirAPI('/api/registro', 'POST', datos);
       mostrarMensaje('Instructor registrado correctamente.', 'exito');
       formInstructor.reset();

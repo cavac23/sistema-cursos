@@ -23,7 +23,7 @@
 
 **Funcionalidades completadas:**
 
-- Autenticación con sesión (`express-session`) y hash de contraseñas (`bcryptjs`).
+- Autenticación con sesión (`express-session`) y hash de contraseñas (`bcryptjs`); validación mínima de correo (formato) y contraseña (8+ caracteres) en registro y perfil.
 - CRUD completo instructor: categorías, cursos (con portada), lecciones (con URL de video/recurso principal).
 - Catálogo público y plataforma de aprendizaje en `curso-detalle.html` (info del curso → lecciones → video → progreso → examen → certificado → encuesta).
 - Inscripción, barra de progreso, marcado de lecciones completadas.
@@ -424,6 +424,10 @@ Sin cambios funcionales en backend, frontend, SQL ni `.env`.
 ### Versión 3.8 — Documentación y README
 
 - README reescrito; carpeta `DOCUMENTACION/` creada; auditoría de archivos obsoletos (sin eliminar).
+
+### Versión 3.23 — Validaciones correo y contraseña *(7 jul 2026)*
+
+- Se reforzaron validaciones mínimas de correo y contraseña para producción: formato de correo, mínimo 8 caracteres en registro/perfil, e instructores deben conservar `@itq.edu.ec` al actualizar perfil.
 
 ### Versión 3.22 — Script 13 base producción limpia *(6 jul 2026)*
 

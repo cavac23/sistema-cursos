@@ -29,24 +29,33 @@
   • No inserta usuarios @test.com; registre cuentas desde la plataforma si las necesita.
 
   ═══════════════════════════════════════════════════════════════════════════════
-  CÓMO USAR (PASOS MANUALES — NO AUTOMÁTICOS)
+  CÓMO USAR EN AZURE SQL DATABASE (PASOS MANUALES — NO AUTOMÁTICOS)
   ═══════════════════════════════════════════════════════════════════════════════
-  1. Conectar SSMS o Azure Data Studio al servidor SQL de desarrollo en Azure.
-  2. Confirmar que NO está conectado a SistemaCursosProduccion como base activa
-     para ejecutar este script (el script crea/usa SistemaCursosDesarrollo).
-  3. Revisar @ConfirmarRecreacion (0 = primera vez; 1 = borrar y recrear).
-  4. Ejecutar el script completo (F5).
-  5. Verificar al final:
+  Azure SQL Database NO permite USE para cambiar de base dentro del mismo script.
+  Debe usar DOS conexiones/consultas separadas:
+
+  PASO A — FASE 1:
+    Conectar a la base master.
+    Seleccionar y ejecutar SOLO el bloque «FASE 1» (crear SistemaCursosDesarrollo).
+
+  PASO B:
+    Abrir una NUEVA consulta en SSMS o Azure Data Studio.
+    En el desplegable de bases, seleccionar SistemaCursosDesarrollo
+    (conexión directa a esa base, sin USE).
+
+  PASO C — FASE 2:
+    Ejecutar SOLO el bloque «FASE 2» (estructura, semillas y verificación).
+
+  PASO D:
+    Revisar las consultas de verificación al final de FASE 2:
        - roles = 5
        - usuarios = 0
        - categorías = 5
        - cursos, inscripciones, certificados, intentos = 0
-       - RecursosCurso NO existe
-  6. En .env local (cuando corresponda), apuntar a:
-       DB_DATABASE=SistemaCursosDesarrollo
-       DB_SERVER=<servidor-azure>.database.windows.net
-  7. Registrar usuarios de prueba manualmente desde /registro.html si los necesita.
-  8. Opcional: asignar administrador con UPDATE (consulta comentada al final).
+       - RecursosCurso NO debe existir
+
+  En SQL Server local (no Azure) también puede ejecutar FASE 1 y FASE 2 por separado
+  conectando a cada base; evite USE dentro del script.
 
   ═══════════════════════════════════════════════════════════════════════════════
   RELACIÓN CON OTRAS BASES
@@ -56,7 +65,20 @@
   • SistemaCursosDesarrollo → entorno separado para pruebas sin afectar producción.
 */
 
-/* ── 1. Crear base de datos si no existe ── */
+/* ═══════════════════════════════════════════════════════════════════════════════
+   FASE 1 — CREAR BASE (ejecutar conectado a master)
+   ═══════════════════════════════════════════════════════════════════════════════
+   NO ejecute FASE 2 en la misma sesión sin cambiar la conexión a SistemaCursosDesarrollo.
+   Después de FASE 1, abra una nueva consulta conectada directamente a SistemaCursosDesarrollo.
+*/
+
+IF DB_NAME() = 'SistemaCursosProduccion'
+BEGIN
+    RAISERROR('PROHIBIDO: No ejecutar FASE 1 estando conectado a SistemaCursosProduccion.', 16, 1);
+    RETURN;
+END;
+GO
+
 IF DB_ID('SistemaCursosDesarrollo') IS NULL
 BEGIN
     CREATE DATABASE SistemaCursosDesarrollo;
@@ -68,28 +90,42 @@ BEGIN
 END;
 GO
 
-USE SistemaCursosDesarrollo;
+PRINT 'FASE 1 completada. Ahora conecte una nueva consulta a SistemaCursosDesarrollo y ejecute FASE 2.';
 GO
+
+/*
+  ═══════════════════════════════════════════════════════════════════════════════
+  DETENER AQUÍ LA FASE 1
+  ═══════════════════════════════════════════════════════════════════════════════
+  Abra una NUEVA consulta en SSMS / Azure Data Studio.
+  Seleccione la base SistemaCursosDesarrollo en el desplegable de conexión.
+  A continuación ejecute únicamente el bloque FASE 2.
+  (No use USE SistemaCursosDesarrollo; Azure SQL Database no lo permite en el script.)
+*/
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   FASE 2 — ESTRUCTURA Y SEMILLAS (ejecutar conectado a SistemaCursosDesarrollo)
+   ═══════════════════════════════════════════════════════════════════════════════ */
 
 SET NOCOUNT ON;
 GO
 
-/* ── 2. Protección: nunca sobre producción ── */
+/* ── Protección: nunca sobre producción ── */
 IF DB_NAME() = 'SistemaCursosProduccion'
 BEGIN
-    RAISERROR('PROHIBIDO: No ejecutar sobre SistemaCursosProduccion.', 16, 1);
+    RAISERROR('PROHIBIDO: No ejecutar FASE 2 sobre SistemaCursosProduccion.', 16, 1);
     RETURN;
 END;
 GO
 
 IF DB_NAME() <> 'SistemaCursosDesarrollo'
 BEGIN
-    RAISERROR('Este script solo debe ejecutarse en SistemaCursosDesarrollo.', 16, 1);
+    RAISERROR('FASE 2 solo debe ejecutarse conectado a SistemaCursosDesarrollo. Seleccione esa base en el desplegable de SSMS y vuelva a ejecutar.', 16, 1);
     RETURN;
 END;
 GO
 
-/* ── 3. Confirmación para recrear base que ya tiene tablas ── */
+/* ── Confirmación para recrear base que ya tiene tablas ── */
 DECLARE @ConfirmarRecreacion BIT = 0;
 /*
   @ConfirmarRecreacion = 0  →  Si ya hay tablas, el script se detiene (seguro).
@@ -137,7 +173,7 @@ END;
 GO
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   4. ESTRUCTURA FINAL (equivalente scripts 01–07 + 09, sin RecursosCurso)
+   ESTRUCTURA FINAL (equivalente scripts 01–07 + 09, sin RecursosCurso)
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Roles ── */
@@ -430,7 +466,7 @@ END;
 GO
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   5. DATOS SEMILLA (solo roles y categorías base)
+   DATOS SEMILLA (solo roles y categorías base)
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 INSERT INTO Roles (nombre_rol, estado)
@@ -477,7 +513,7 @@ GO
 */
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   6. VERIFICACIÓN FINAL
+   VERIFICACIÓN FINAL (FASE 2)
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 PRINT '';
@@ -505,5 +541,5 @@ SELECT id_rol, nombre_rol, estado FROM Roles ORDER BY id_rol;
 SELECT id_categoria, nombre_categoria, estado FROM Categorias ORDER BY id_categoria;
 GO
 
-PRINT 'Script 14 finalizado. Revise que total_usuarios = 0 y RecursosCurso no exista.';
+PRINT 'FASE 2 / Script 14 finalizado. Revise que total_usuarios = 0 y RecursosCurso no exista.';
 GO
