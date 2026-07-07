@@ -1,0 +1,135 @@
+{
+  "fecha": "2026-07-04T23:23:04.819Z",
+  "resultados": [
+    {
+      "paso": "0",
+      "ok": true,
+      "detalle": "Servidor activo y BD accesible"
+    },
+    {
+      "paso": "prep",
+      "ok": true,
+      "detalle": "encuesta_completada reseteada a false para prueba limpia"
+    },
+    {
+      "paso": "1",
+      "ok": true,
+      "detalle": "Login exitoso — rol estudiante"
+    },
+    {
+      "paso": "2",
+      "ok": true,
+      "detalle": "Detalle curso 6 — progreso 100%, encuesta_completada=false"
+    },
+    {
+      "paso": "3",
+      "ok": true,
+      "detalle": "Encuesta al inicio del sidebar"
+    },
+    {
+      "paso": "3b",
+      "ok": true,
+      "detalle": "Encuesta visible sin scroll en viewport del sidebar"
+    },
+    {
+      "paso": "4",
+      "ok": true,
+      "detalle": "Diseño integrado — fondo rgb(255, 251, 235), borde izq 4px"
+    },
+    {
+      "paso": "5",
+      "ok": true,
+      "detalle": "Enlace encuesta OK (https://docs.google.com/forms/d/e/1FAIpQLSenyCqSU4tb8cuacY6L...) target=_blank"
+    },
+    {
+      "paso": "5b",
+      "ok": true,
+      "detalle": "Google Forms abrió en nueva pestaña: https://docs.google.com/forms/d/e/1FAIpQLSenyCqSU4tb8cuacY6LnjuRkT8AgV..."
+    },
+    {
+      "paso": "7d",
+      "ok": true,
+      "detalle": "Mensaje confirmación: \"Gracias. Su encuesta fue registrada correctamente.\""
+    },
+    {
+      "paso": "7c",
+      "ok": true,
+      "detalle": "Bloque encuesta desapareció tras confirmar"
+    },
+    {
+      "paso": "10",
+      "ok": true,
+      "detalle": "Progreso, examen y navegación de lecciones intactos tras encuesta"
+    },
+    {
+      "paso": "7a",
+      "ok": true,
+      "detalle": "POST encuesta-completada OK — Encuesta ya registrada previamente"
+    },
+    {
+      "paso": "7b",
+      "ok": true,
+      "detalle": "API progreso confirma encuesta_completada=true, fecha=2026-07-04T18:23:02.250Z"
+    },
+    {
+      "paso": "8",
+      "ok": false,
+      "detalle": "BD no actualizada: null"
+    },
+    {
+      "paso": "10b",
+      "ok": true,
+      "detalle": "Estado examen sin cambios"
+    },
+    {
+      "paso": "10c",
+      "ok": true,
+      "detalle": "Certificado sin cambios"
+    },
+    {
+      "paso": "10d",
+      "ok": true,
+      "detalle": "Progreso intacto (100%)"
+    },
+    {
+      "paso": "9",
+      "ok": true,
+      "detalle": "Excel admin — fila estudiante@test.com curso 6: Encuesta = \"Sí\""
+    }
+  ],
+  "ui": {
+    "sidebarExiste": true,
+    "encuestaExiste": true,
+    "ordenSidebar": [
+      "seccionEncuestaCurso",
+      "barraProgresoCurso",
+      "seccionExamenCurso",
+      "titulo-sidebar-lecciones",
+      "navegacionLecciones"
+    ],
+    "encuestaEsPrimerHijo": true,
+    "visibleSinScroll": true,
+    "encuestaStyles": {
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1",
+      "background": "rgb(255, 251, 235)",
+      "borderLeft": "4px"
+    },
+    "urlEncuesta": "https://docs.google.com/forms/d/e/1FAIpQLSenyCqSU4tb8cuacY6LnjuRkT8AgVni4UefNeqXa5t48WfB8g/viewform?usp=header",
+    "targetEncuesta": "_blank",
+    "relEncuesta": "noopener noreferrer",
+    "bloqueado": false,
+    "barraProgreso": true,
+    "seccionExamen": true,
+    "navegacionLecciones": true,
+    "popupUrl": "https://docs.google.com/forms/d/e/1FAIpQLSenyCqSU4tb8cuacY6LnjuRkT8AgVni4UefNeqXa5t48WfB8g/viewform?usp=header",
+    "dialogMsg": "Gracias. Su encuesta fue registrada correctamente.",
+    "postUi": {
+      "encuestaVisible": false,
+      "barraProgreso": true,
+      "seccionExamen": true,
+      "navegacionLecciones": true
+    }
+  }
+}

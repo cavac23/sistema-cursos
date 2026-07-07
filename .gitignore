@@ -1,0 +1,26 @@
+# Dependencias de Node.js
+node_modules/
+
+# Variables de entorno y credenciales
+.env
+
+# Archivos temporales
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Configuraciones locales del editor
+.vscode/
+.idea/
+
+# Backups o comprimidos
+*.zip
+*.rar
+
+# Archivos subidos por instructores (no versionar binarios)
+uploads/**/*
+!uploads/videos/.gitkeep
+!uploads/documentos/.gitkeep
+!uploads/portadas/.gitkeep
+
+docker-compose.yaml

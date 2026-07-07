@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de usuarios ITQ</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="img/Logo2_ITQ.png">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <nav class="menu" data-menu-dinamico>
+    <a href="index.html" data-nav="inicio">Inicio</a>
+    <a href="admin.html" data-nav="panel-admin" hidden>Dashboard</a>
+    <a href="cursos.html" data-nav="cursos">Cursos</a>
+    <a href="login.html" data-nav="login">Iniciar sesión</a>
+    <a href="registro.html" data-nav="registro">Registrarse</a>
+    <a href="estudiante.html" data-nav="panel-estudiante" hidden>Mi Panel</a>
+    <a href="instructor.html" data-nav="panel-instructor" hidden>Panel Instructor</a>
+    <a href="reportes.html" data-nav="reportes" hidden>Reportes</a>
+    <a href="perfil.html" data-nav="perfil" hidden>Perfil</a>
+    <button type="button" id="btnCerrar" class="boton-nav" data-nav="logout" hidden>Cerrar sesión</button>
+  </nav>
+
+  <main class="contenedor">
+    <section class="tarjeta registro">
+      <h2>Forma parte de nuestra comunidad ITQ</h2>
+      <p>Elige tu rol. Si deseas acceder al contenido de los cursos, regístrate como usuario registrado.</p>
+      <p class="panel-aviso">Para registrarse como instructor, use un correo institucional @itq.edu.ec.</p>
+
+      <!-- Selección de rol -->
+      <label for="rol">Selecciona tu rol:</label>
+      <select id="rol" required>
+        <option value="">-- Selecciona --</option>
+        <option value="usuario">Usuario registrado</option>
+        <option value="instructor">Instructor ITQ</option>
+      </select>
+
+      <!-- Formulario Usuario registrado -->
+      <form id="form-estudiante" style="display:none;">
+        <label>Nombre</label>
+        <input type="text" id="nombreEst" required>
+
+        <label>Apellido</label>
+        <input type="text" id="apellidoEst" required>
+
+        <label>Correo electrónico</label>
+        <input type="email" id="correoEst" required>
+
+        <label>Contraseña</label>
+        <input type="password" id="contrasenaEst" required>
+
+        <button type="submit" class="boton">Registrar usuario</button>
+      </form>
+
+      <!-- Formulario Instructor -->
+      <form id="form-instructor" style="display:none;">
+        <label>Nombre</label>
+        <input type="text" id="nombreInst" required>
+
+        <label>Apellido</label>
+        <input type="text" id="apellidoInst" required>
+
+        <label>Correo electrónico</label>
+        <input type="email" id="correoInst" required>
+
+        <label>Contraseña</label>
+        <input type="password" id="contrasenaInst" required>
+
+        <button type="submit" class="boton">Registrar Instructor</button>
+      </form>
+
+      <!-- Mensajes -->
+      <p id="mensaje"></p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

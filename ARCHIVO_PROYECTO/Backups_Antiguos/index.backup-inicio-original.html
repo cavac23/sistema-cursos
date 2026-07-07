@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistema de Vinculación - Módulo 1</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="img/Logo2_ITQ.png" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+</head>
+<body>
+  <header class="header-itq">
+    <div class="marca-itq">
+      <img src="img/Logo2_ITQ.png" alt="Logo ITQ" />
+      <div>
+        <h1>Instituto Superior Tecnológico Quito</h1>
+        <h2>Proyecto de Vinculación 2026 TRANSFORMATEC</h2>
+        <p class="frase-itq">Formamos tu propósito de vida</p>
+      </div>
+    </div>
+  </header>
+
+  <nav class="menu" data-menu-dinamico>
+    <a href="index.html" data-nav="inicio">Inicio</a>
+    <a href="admin.html" data-nav="panel-admin" hidden>Dashboard</a>
+    <a href="cursos.html" data-nav="cursos">Cursos</a>
+    <a href="login.html" data-nav="login">Iniciar sesión</a>
+    <a href="registro.html" data-nav="registro">Registrarse</a>
+    <a href="estudiante.html" data-nav="panel-estudiante" hidden>Mi Panel</a>
+    <a href="instructor.html" data-nav="panel-instructor" hidden>Panel Instructor</a>
+    <a href="reportes.html" data-nav="reportes" hidden>Reportes</a>
+    <a href="perfil.html" data-nav="perfil" hidden>Perfil</a>
+    <button type="button" id="btnCerrar" class="boton-nav" data-nav="logout" hidden>Cerrar sesión</button>
+  </nav>
+
+  <section class="slider">
+    <div class="slides fade">
+      <img src="img/banner1.jpg" alt="Banner 1" />
+    </div>
+    <div class="slides fade">
+      <img src="img/banner2.jpg" alt="Banner 2" />
+    </div>
+    <div class="slides fade">
+      <img src="img/banner3.jpg" alt="Banner 3" />
+    </div>
+    <div class="asistente-ayuda" onclick="abrirChat()">
+  <img src="img/mi-gif.gif">
+  <div class="texto-ayuda">Ayuda Virtual</div>
+</div>
+
+<div class="asistente-ayuda" onclick="abrirChat()">
+  <img src="img/mi-gif.gif" alt="Asistente Virtual ITQ">
+  <div class="texto-ayuda">Ayuda Virtual</div>
+</div>
+
+<div class="chat-box" id="chatBox">
+  <div class="chat-header">
+    <span>Asistente Virtual ITQ</span>
+    <button onclick="cerrarChat()">×</button>
+  </div>
+
+  <div class="chat-mensajes" id="chatMensajes">
+    <p><b>Asistente:</b> Hola 👋 ¿En qué puedo ayudarte?</p>
+  </div>
+
+  <div class="chat-input">
+    <input type="text" id="mensajeUsuario" placeholder="Escribe tu pregunta...">
+    <button onclick="responderChat()">Enviar</button>
+  </div>
+</div>
+
+
+    <section class="tarjeta principal">
+      <img
+        src="img/bienvenido.jpg"
+        alt="Instituto Superior Tecnológico Quito"
+        class="imagen-slider"
+      />
+      <h2>Bienvenido</h2>
+      <p>Este sistema inicia con el registro de usuarios y roles...</p>
+      <div class="acciones">
+        <button class="boton secundario" id="btn-comentarios">Comentarios</button>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="tarjeta">
+        <img src="img/estudiante.jpg" alt="Estudiante" />
+        <h3>Estudiante</h3>
+        <p>Podrá ingresar al sistema y en módulos posteriores inscribirse en cursos.</p>
+      </article>
+
+      <article class="tarjeta">
+        <img src="img/instructor.jpg" alt="Instructor" />
+        <h3>Instructor</h3>
+        <p>Podrá iniciar sesión, crear cursos y gestionar lecciones desde el panel del instructor.</p>
+      </article>
+
+      <article class="tarjeta">
+        <img src="img/base.jpg" alt="Base del sistema" />
+        <h3>Base del sistema</h3>
+        <p>Usuarios y roles quedan listos como puerta de conexión para los demás módulos.</p>
+      </article>
+    </section>
+
+    <!-- Imagen de fondo estudiantil -->
+    <section class="fondo-estudiantil"></section>
+  </section>
+
+  <footer class="footer-itq">
+  <p>Instituto Superior Tecnológico Quito - ITQ</p>
+  <p>Quito - Ecuador</p>
+  <div class="redes-sociales">
+    <a href="https://www.facebook.com/InstitutoQuitoITQ/" target="_blank"
+      ><i class="fab fa-facebook"></i
+    ></a>
+    <a href="https://www.instagram.com/institutoquitoitq/" target="_blank"
+      ><i class="fab fa-instagram"></i
+    ></a>
+    <a href="https://wa.me/593963561961" target="_blank"
+      ><i class="fab fa-whatsapp"></i
+    ></a>
+    <a href="https://www.youtube.com/" target="_blank"
+      ><i class="fab fa-youtube"></i
+    ></a>
+    <a href="https://ec.linkedin.com/company/institutoquitoitq" target="_blank"
+      ><i class="fab fa-linkedin"></i
+    ></a>
+  </div>
+</footer>
+
+
+  <script src="app.js"></script>
+</body>
+</html>

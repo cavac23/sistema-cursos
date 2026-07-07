@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Administrador ITQ</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="img/Logo2_ITQ.png">
+</head>
+<body data-pagina="panel-admin">
+  <nav class="menu" data-menu-dinamico>
+    <a href="index.html" data-nav="inicio">Inicio</a>
+    <a href="admin.html" data-nav="panel-admin" hidden>Dashboard</a>
+    <a href="cursos.html" data-nav="cursos">Cursos</a>
+    <a href="login.html" data-nav="login">Iniciar sesión</a>
+    <a href="registro.html" data-nav="registro">Registrarse</a>
+    <a href="estudiante.html" data-nav="panel-estudiante" hidden>Mi Panel</a>
+    <a href="instructor.html" data-nav="panel-instructor" hidden>Panel Instructor</a>
+    <a href="reportes.html" data-nav="reportes" hidden>Reportes</a>
+    <a href="perfil.html" data-nav="perfil" hidden>Perfil</a>
+    <button type="button" id="btnCerrar" class="boton-nav" data-nav="logout" hidden>Cerrar sesión</button>
+  </nav>
+
+  <main class="contenedor-cursos modulo2-panel">
+    <section class="encabezado-catalogo panel-encabezado-instructor">
+      <h1 class="titulo">Dashboard Administrador</h1>
+      <p id="bienvenidaAdmin">Cargando sesión...</p>
+    </section>
+
+    <p id="estadoDashboard" class="estado-modulo2" role="status"></p>
+
+    <section class="panel-seccion">
+      <h2>Resumen del sistema</h2>
+      <div class="grid-dashboard-admin" id="tarjetasDashboard" aria-live="polite"></div>
+    </section>
+
+    <section class="panel-seccion">
+      <h2>Acciones rápidas</h2>
+      <div class="acciones-dashboard-admin">
+        <a href="reportes.html" class="boton">Ver reportes</a>
+        <button type="button" class="boton" id="btnPdfGeneralAdmin">Descargar reporte general PDF</button>
+        <button type="button" class="boton secundario" id="btnExcelGeneralAdmin">Descargar reporte general Excel</button>
+        <a href="cursos.html" class="boton secundario">Ver cursos</a>
+        <a href="perfil.html" class="boton secundario">Ir al perfil</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="modulo-admin.js"></script>
+</body>
+</html>

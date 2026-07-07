@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Plataforma ITQ</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="img/Logo2_ITQ.png" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+</head>
+<body>
+  <header class="header-itq">
+    <div class="marca-itq">
+      <img src="img/Logo2_ITQ.png" alt="Logo ITQ" />
+      <div>
+        <h1>Instituto Superior Tecnológico Quito</h1>
+        <h2>Proyecto de Vinculación 2026 TRANSFORMATEC</h2>
+        <p class="frase-itq">Formamos tu propósito de vida</p>
+      </div>
+    </div>
+  </header>
+
+  <nav class="menu" data-menu-dinamico>
+    <a href="index.html" data-nav="inicio">Inicio</a>
+    <a href="admin.html" data-nav="panel-admin" hidden>Dashboard</a>
+    <a href="cursos.html" data-nav="cursos">Cursos</a>
+    <a href="login.html" data-nav="login">Iniciar sesión</a>
+    <a href="registro.html" data-nav="registro">Registrarse</a>
+    <a href="estudiante.html" data-nav="panel-estudiante" hidden>Mi Panel</a>
+    <a href="instructor.html" data-nav="panel-instructor" hidden>Panel Instructor</a>
+    <a href="reportes.html" data-nav="reportes" hidden>Reportes</a>
+    <a href="perfil.html" data-nav="perfil" hidden>Perfil</a>
+    <button type="button" id="btnCerrar" class="boton-nav" data-nav="logout" hidden>Cerrar sesión</button>
+  </nav>
+
+  <section class="slider">
+    <div class="slides fade">
+      <img src="img/banner1.png" alt="Banner 1" />
+    </div>
+    <div class="slides fade">
+      <img src="img/banner2.png" alt="Banner 2" />
+    </div>
+    <div class="slides fade">
+      <img src="img/banner3.png" alt="Banner 3" />
+    </div>
+    <div class="asistente-ayuda" onclick="abrirChat()">
+  <img src="img/mi-gif.gif">
+  <div class="texto-ayuda">Ayuda Virtual</div>
+</div>
+
+<div class="asistente-ayuda" onclick="abrirChat()">
+  <img src="img/mi-gif.gif" alt="Asistente Virtual ITQ">
+  <div class="texto-ayuda">Ayuda Virtual</div>
+</div>
+
+<div class="chat-box" id="chatBox">
+  <div class="chat-header">
+    <span>Asistente Virtual ITQ</span>
+    <button onclick="cerrarChat()">×</button>
+  </div>
+
+  <div class="chat-mensajes" id="chatMensajes">
+    <p><b>Asistente:</b> Hola 👋 ¿En qué puedo ayudarte?</p>
+  </div>
+
+  <div class="chat-input">
+    <input type="text" id="mensajeUsuario" placeholder="Escribe tu pregunta...">
+    <button onclick="responderChat()">Enviar</button>
+  </div>
+</div>
+
+
+    <section class="tarjeta principal">
+      <img
+        src="img/bienvenido.jpg"
+        alt="Instituto Superior Tecnológico Quito"
+        class="imagen-slider"
+      />
+      <h2>Bienvenido a la Plataforma Virtual de Aprendizaje</h2>
+      <p>Explora cursos virtuales, accede a contenidos organizados por lecciones y desarrolla nuevas competencias mediante una experiencia de aprendizaje diseñada para la comunidad del Instituto Tecnológico Quito.</p>
+      <div class="acciones">
+        <button type="button" class="boton secundario" id="btn-preguntas-frecuentes">
+          <i class="fas fa-circle-question" aria-hidden="true"></i>
+          Preguntas frecuentes
+        </button>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="tarjeta">
+        <img src="img/estudiante.jpg" alt="Aprende" />
+        <h3>Aprende</h3>
+        <p>Accede a cursos virtuales organizados por lecciones y desarrolla nuevos conocimientos mediante contenidos preparados por los instructores.</p>
+      </article>
+
+      <article class="tarjeta">
+        <img src="img/instructor.jpg" alt="Aprende a tu ritmo" />
+        <h3>Aprende a tu ritmo</h3>
+        <p>Visualiza las lecciones del curso y avanza según tu disponibilidad, permitiéndote continuar tu proceso de aprendizaje de forma flexible.</p>
+      </article>
+
+      <article class="tarjeta">
+        <img src="img/base.jpg" alt="Fortalece tus conocimientos" />
+        <h3>Fortalece tus conocimientos</h3>
+        <p>Cada curso representa una oportunidad para adquirir nuevas habilidades y continuar tu formación mediante experiencias de aprendizaje organizadas.</p>
+      </article>
+    </section>
+
+    <!-- Imagen de fondo estudiantil -->
+    <section class="fondo-estudiantil"></section>
+  </section>
+
+  <footer class="footer-itq">
+  <p>Instituto Superior Tecnológico Quito - ITQ</p>
+  <p>Quito - Ecuador</p>
+  <div class="redes-sociales">
+    <a href="https://www.facebook.com/InstitutoQuitoITQ/" target="_blank"
+      ><i class="fab fa-facebook"></i
+    ></a>
+    <a href="https://www.instagram.com/institutoquitoitq/" target="_blank"
+      ><i class="fab fa-instagram"></i
+    ></a>
+    <a href="https://wa.me/593963561961" target="_blank"
+      ><i class="fab fa-whatsapp"></i
+    ></a>
+    <a href="https://www.youtube.com/" target="_blank"
+      ><i class="fab fa-youtube"></i
+    ></a>
+    <a href="https://ec.linkedin.com/company/institutoquitoitq" target="_blank"
+      ><i class="fab fa-linkedin"></i
+    ></a>
+  </div>
+  <div class="footer-institucional">
+    <p class="footer-powered">Powered by</p>
+    <p class="footer-instituto">INSTITUTO SUPERIOR TECNOLÓGICO QUITO</p>
+    <p class="footer-plataforma">Plataforma de Vinculación con la Sociedad</p>
+    <p class="footer-desarrollo">Desarrollada por estudiantes de Segundo Nivel · Desarrollo de Software · Modalidad Virtual Nocturna</p>
+    <p class="footer-copyright">&copy; 2026 &middot; Todos los derechos reservados</p>
+  </div>
+</footer>
+
+  <div id="modalFaq" class="modal-faq-overlay" hidden>
+    <div class="modal-faq-contenido" role="dialog" aria-modal="true" aria-labelledby="modalFaqTitulo">
+      <div class="modal-faq-cabecera">
+        <h2 id="modalFaqTitulo">Preguntas frecuentes</h2>
+        <button type="button" class="modal-faq-cerrar" id="btnCerrarFaq" aria-label="Cerrar preguntas frecuentes">&times;</button>
+      </div>
+      <div class="modal-faq-cuerpo">
+        <div class="faq-acordeon">
+          <details class="faq-item">
+            <summary>¿Necesito registrarme para acceder a los cursos?</summary>
+            <p>Sí. Para inscribirte, realizar el seguimiento de tu progreso y acceder a las funcionalidades de la plataforma es necesario crear una cuenta de usuario.</p>
+          </details>
+          <details class="faq-item">
+            <summary>¿Cómo puedo inscribirme en un curso?</summary>
+            <p>Una vez que hayas iniciado sesión, ingresa al catálogo de cursos y selecciona el curso de tu interés. Desde allí podrás realizar tu inscripción y comenzar tu proceso de aprendizaje.</p>
+          </details>
+          <details class="faq-item">
+            <summary>¿Puedo inscribirme en más de un curso?</summary>
+            <p>Sí. Puedes inscribirte en todos los cursos que se encuentren disponibles dentro de la plataforma y avanzar en ellos de acuerdo con tu disponibilidad.</p>
+          </details>
+          <details class="faq-item">
+            <summary>¿Cómo avanzo dentro de un curso?</summary>
+            <p>Cada curso está organizado en lecciones. Puedes acceder a ellas desde la plataforma y avanzar de acuerdo con la organización definida para ese curso y tu propio ritmo de aprendizaje.</p>
+          </details>
+          <details class="faq-item">
+            <summary>¿Todos los cursos incluyen evaluación?</summary>
+            <p>No necesariamente. Cada instructor define la estructura de su curso. Algunos cursos pueden incluir evaluaciones, mientras que otros se enfocan únicamente en el desarrollo de contenidos y actividades de aprendizaje.</p>
+          </details>
+          <details class="faq-item">
+            <summary>¿Todos los cursos generan un certificado?</summary>
+            <p>No. La disponibilidad del certificado depende de la configuración realizada por el instructor y de las características específicas de cada curso.</p>
+          </details>
+          <details class="faq-item">
+            <summary>¿Olvidé mi contraseña, qué debo hacer?</summary>
+            <p>Si olvidaste tu contraseña, comunícate con el administrador de la plataforma para solicitar el restablecimiento de tu acceso.</p>
+          </details>
+          <details class="faq-item">
+            <summary>¿Los recursos del curso son obligatorios?</summary>
+            <p>No siempre. Algunos cursos incluyen únicamente las lecciones principales con video; el contenido complementario depende de lo que configure cada instructor.</p>
+          </details>
+          <details class="faq-item">
+            <summary>¿Debo completar la encuesta de satisfacción?</summary>
+            <p>Si el curso lo requiere, la plataforma solicitará completar la encuesta de satisfacción una única vez. Una vez registrada, no volverá a mostrarse en otros cursos.</p>
+          </details>
+          <details class="faq-item">
+            <summary>¿Quién desarrolla esta plataforma?</summary>
+            <p>La Plataforma Virtual de Aprendizaje fue desarrollada por estudiantes de Segundo Nivel de la carrera de Desarrollo de Software, modalidad nocturna virtual, del Instituto Superior Tecnológico Quito, como parte del Proyecto de Vinculación con la Sociedad "TransformaTec - Mantenimiento Tecnológico Comunitario y Alfabetización Digital".</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function configurarPreguntasFrecuentes() {
+      const modal = document.getElementById('modalFaq');
+      const btnAbrir = document.getElementById('btn-preguntas-frecuentes');
+      const btnCerrar = document.getElementById('btnCerrarFaq');
+
+      if (!modal || !btnAbrir || !btnCerrar) return;
+
+      function abrirModal() {
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        btnCerrar.focus();
+      }
+
+      function cerrarModal() {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+        btnAbrir.focus();
+      }
+
+      btnAbrir.addEventListener('click', abrirModal);
+      btnCerrar.addEventListener('click', cerrarModal);
+
+      modal.addEventListener('click', (event) => {
+        if (event.target === modal) cerrarModal();
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !modal.hidden) cerrarModal();
+      });
+    })();
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>

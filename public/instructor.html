@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Instructor ITQ</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="img/Logo2_ITQ.png">
+</head>
+<body data-pagina="panel-instructor">
+  <nav class="menu" data-menu-dinamico>
+    <a href="index.html" data-nav="inicio">Inicio</a>
+    <a href="admin.html" data-nav="panel-admin" hidden>Dashboard</a>
+    <a href="cursos.html" data-nav="cursos">Cursos</a>
+    <a href="login.html" data-nav="login">Iniciar sesión</a>
+    <a href="registro.html" data-nav="registro">Registrarse</a>
+    <a href="estudiante.html" data-nav="panel-estudiante" hidden>Mi Panel</a>
+    <a href="instructor.html" data-nav="panel-instructor" hidden>Panel Instructor</a>
+    <a href="reportes.html" data-nav="reportes" hidden>Reportes</a>
+    <a href="perfil.html" data-nav="perfil" hidden>Perfil</a>
+    <button type="button" id="btnCerrar" class="boton-nav" data-nav="logout" hidden>Cerrar sesión</button>
+  </nav>
+
+  <main class="contenedor-cursos modulo2-panel">
+    <section class="encabezado-catalogo panel-encabezado-instructor">
+      <h1 class="titulo">Panel del instructor</h1>
+      <p id="bienvenidaInstructor">Cargando sesión...</p>
+    </section>
+
+    <p id="mensajePanel" class="estado-modulo2" role="status"></p>
+
+    <section class="panel-seccion">
+      <h2>Categorías</h2>
+      <form id="formCategoria" class="form-panel">
+        <input type="hidden" id="categoriaIdEdicion">
+        <div class="form-grid">
+          <div class="campo-filtro">
+            <label for="categoriaNombre">Nombre</label>
+            <input type="text" id="categoriaNombre" required maxlength="80">
+          </div>
+          <div class="campo-filtro">
+            <label for="categoriaDescripcion">Descripción</label>
+            <input type="text" id="categoriaDescripcion" maxlength="255">
+          </div>
+        </div>
+        <div class="acciones-form">
+          <button type="submit" class="boton" id="btnGuardarCategoria">Guardar categoría</button>
+          <button type="button" class="boton secundario" id="btnCancelarCategoria">Cancelar</button>
+        </div>
+      </form>
+      <div class="tabla-contenedor">
+        <table class="tabla-panel">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaCategorias"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel-seccion panel-seccion-cursos">
+      <h2>Mis cursos</h2>
+      <form id="formCurso" class="form-panel">
+        <input type="hidden" id="cursoIdEdicion">
+        <div class="form-grid">
+          <div class="campo-filtro">
+            <label for="cursoTitulo">Título</label>
+            <input type="text" id="cursoTitulo" required maxlength="120">
+          </div>
+          <div class="campo-filtro">
+            <label for="cursoCategoria">Categoría</label>
+            <select id="cursoCategoria">
+              <option value="">Sin categoría</option>
+            </select>
+          </div>
+          <div class="campo-filtro campo-ancho">
+            <label for="cursoDescripcion">Descripción</label>
+            <textarea id="cursoDescripcion" required rows="3"></textarea>
+          </div>
+          <div class="campo-filtro campo-ancho bloque-portada-curso">
+            <span class="etiqueta-seccion-form">Portada (opcional)</span>
+            <div class="portada-opciones">
+              <div class="campo-filtro">
+                <label for="cursoImagen">URL de imagen</label>
+                <input type="url" id="cursoImagen" maxlength="255" placeholder="https://...">
+                <p class="texto-ayuda">Si usa Google Drive, pegue el enlace compartido (por ejemplo, <code>/file/d/ID/view</code>). El archivo debe estar compartido como <strong>Cualquier persona con el enlace puede ver</strong>.</p>
+              </div>
+              <div class="campo-filtro campo-ancho" id="campoSubirPortada">
+                <label for="cursoPortadaArchivo">Subir imagen</label>
+                <div class="fila-subida-portada">
+                  <input type="file" id="cursoPortadaArchivo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                  <button type="button" class="boton secundario" id="btnSubirPortada">Subir</button>
+                </div>
+                <div id="vistaPreviaPortada" class="vista-previa-portada" hidden></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="acciones-form">
+          <button type="submit" class="boton" id="btnGuardarCurso">Guardar curso</button>
+          <button type="button" class="boton secundario" id="btnCancelarCurso">Cancelar</button>
+        </div>
+      </form>
+      <p id="mensajeCurso" class="estado-modulo2 mensaje-curso" role="status"></p>
+      <div class="tabla-contenedor">
+        <table class="tabla-panel">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Categoría</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaCursos"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel-seccion" id="seccionLecciones" hidden>
+      <h2>Lecciones del curso: <span id="nombreCursoSeleccionado"></span></h2>
+      <p class="panel-contexto">
+        <button type="button" class="boton secundario" id="btnCerrarLecciones">Volver a cursos</button>
+      </p>
+      <form id="formLeccion" class="form-panel">
+        <input type="hidden" id="leccionIdEdicion">
+        <div class="form-grid">
+          <div class="campo-filtro">
+            <label for="leccionTitulo">Título</label>
+            <input type="text" id="leccionTitulo" required maxlength="120">
+          </div>
+          <div class="campo-filtro">
+            <label for="leccionOrden">Orden</label>
+            <input type="number" id="leccionOrden" required min="1">
+          </div>
+          <div class="campo-filtro">
+            <label for="leccionDuracion">Duración (min)</label>
+            <input type="number" id="leccionDuracion" min="1">
+          </div>
+          <div class="campo-filtro campo-ancho">
+            <label for="leccionDescripcion">Descripción</label>
+            <textarea id="leccionDescripcion" rows="2" maxlength="500"></textarea>
+          </div>
+          <div class="campo-filtro campo-ancho">
+            <label for="leccionUrlRecurso">Link del video / recurso de la lección</label>
+            <input type="url" id="leccionUrlRecurso" maxlength="500" required placeholder="https://youtube.com/... o https://drive.google.com/...">
+            <p class="panel-aviso panel-aviso-corto">Ingrese el enlace principal de la lección: YouTube, Drive u otra URL externa.</p>
+          </div>
+        </div>
+        <div class="acciones-form">
+          <button type="submit" class="boton" id="btnGuardarLeccion">Guardar lección</button>
+          <button type="button" class="boton secundario" id="btnCancelarLeccion">Cancelar</button>
+        </div>
+      </form>
+      <div class="tabla-contenedor">
+        <table class="tabla-panel">
+          <thead>
+            <tr>
+              <th>Orden</th>
+              <th>Título</th>
+              <th>Duración</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaLecciones"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel-seccion" id="seccionExamenes" hidden>
+      <h2>Examen del curso: <span id="nombreCursoExamenes"></span></h2>
+      <p class="panel-contexto">
+        <button type="button" class="boton secundario" id="btnCerrarExamenes">Volver a cursos</button>
+      </p>
+
+      <form id="formExamen" class="form-panel">
+        <div class="form-grid">
+          <div class="campo-filtro">
+            <label for="examenPorcentaje">% para aprobar</label>
+            <input type="number" id="examenPorcentaje" min="0" max="100" value="70" required>
+          </div>
+          <div class="campo-filtro campo-ancho">
+            <label for="examenInstrucciones">Instrucciones</label>
+            <textarea id="examenInstrucciones" rows="2" maxlength="500"></textarea>
+          </div>
+        </div>
+        <div class="acciones-form">
+          <button type="submit" class="boton" id="btnGuardarExamen">Guardar examen</button>
+        </div>
+      </form>
+
+      <h3>Preguntas del examen</h3>
+      <p id="avisoPreguntas" class="panel-aviso">Guarde el examen primero para poder agregar preguntas.</p>
+      <form id="formPregunta" class="form-panel" hidden>
+        <input type="hidden" id="preguntaIdEdicion">
+        <div class="form-grid">
+          <div class="campo-filtro campo-ancho">
+            <label for="preguntaEnunciado">Enunciado</label>
+            <textarea id="preguntaEnunciado" required rows="2" maxlength="500"></textarea>
+          </div>
+          <div class="campo-filtro"><label for="preguntaA">Opción A</label><input type="text" id="preguntaA" required maxlength="255"></div>
+          <div class="campo-filtro"><label for="preguntaB">Opción B</label><input type="text" id="preguntaB" required maxlength="255"></div>
+          <div class="campo-filtro"><label for="preguntaC">Opción C</label><input type="text" id="preguntaC" required maxlength="255"></div>
+          <div class="campo-filtro"><label for="preguntaD">Opción D</label><input type="text" id="preguntaD" required maxlength="255"></div>
+          <div class="campo-filtro">
+            <label for="preguntaCorrecta">Respuesta correcta</label>
+            <select id="preguntaCorrecta" required>
+              <option value="A">A</option><option value="B">B</option>
+              <option value="C">C</option><option value="D">D</option>
+            </select>
+          </div>
+          <div class="campo-filtro">
+            <label for="preguntaOrden">Orden</label>
+            <input type="number" id="preguntaOrden" required min="1" value="1">
+          </div>
+        </div>
+        <div class="acciones-form">
+          <button type="submit" class="boton" id="btnGuardarPregunta">Guardar pregunta</button>
+          <button type="button" class="boton secundario" id="btnCancelarPregunta">Cancelar</button>
+        </div>
+      </form>
+
+      <div class="tabla-contenedor">
+        <table class="tabla-panel">
+          <thead><tr><th>#</th><th>Enunciado</th><th>Correcta</th><th>Acciones</th></tr></thead>
+          <tbody id="tablaPreguntas"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel-seccion" id="seccionEstudiantes" hidden>
+      <h2>Estudiantes inscritos en: <span id="nombreCursoEstudiantes"></span></h2>
+      <p class="panel-contexto">
+        <button type="button" class="boton secundario" id="btnCerrarEstudiantes">Volver a cursos</button>
+      </p>
+      <div class="tabla-contenedor">
+        <table class="tabla-panel">
+          <thead>
+            <tr>
+              <th>Estudiante</th>
+              <th>Correo</th>
+              <th>Fecha inscripción</th>
+              <th>Progreso</th>
+              <th>%</th>
+            </tr>
+          </thead>
+          <tbody id="tablaEstudiantes"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="imagen-utils.js"></script>
+  <script src="texto-utils.js"></script>
+  <script src="modulo2-instructor.js"></script>
+</body>
+</html>

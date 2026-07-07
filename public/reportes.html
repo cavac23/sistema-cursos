@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes ITQ</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="img/Logo2_ITQ.png">
+</head>
+<body data-pagina="reportes">
+  <nav class="menu" data-menu-dinamico>
+    <a href="index.html" data-nav="inicio">Inicio</a>
+    <a href="admin.html" data-nav="panel-admin" hidden>Dashboard</a>
+    <a href="cursos.html" data-nav="cursos">Cursos</a>
+    <a href="login.html" data-nav="login">Iniciar sesión</a>
+    <a href="registro.html" data-nav="registro">Registrarse</a>
+    <a href="estudiante.html" data-nav="panel-estudiante" hidden>Mi Panel</a>
+    <a href="instructor.html" data-nav="panel-instructor" hidden>Panel Instructor</a>
+    <a href="reportes.html" data-nav="reportes" hidden>Reportes</a>
+    <a href="perfil.html" data-nav="perfil" hidden>Perfil</a>
+    <button type="button" id="btnCerrar" class="boton-nav" data-nav="logout" hidden>Cerrar sesión</button>
+  </nav>
+
+  <main class="contenedor-cursos modulo2-panel">
+    <section class="encabezado-catalogo">
+      <h1 class="titulo">Reportes</h1>
+      <p id="bienvenidaReportes">Cargando sesión...</p>
+    </section>
+
+    <p id="mensajeReportes" class="estado-modulo2" role="status"></p>
+
+    <section class="panel-seccion" id="seccionListaCursos">
+      <div class="encabezado-seccion-con-accion">
+        <div>
+          <h2>Cursos</h2>
+          <p class="subtitulo-seccion">Selecciona un curso para ver el detalle de sus estudiantes.</p>
+        </div>
+        <button type="button" class="boton" id="btnDescargarTodosCursos">Descargar Excel</button>
+        <button type="button" class="boton secundario" id="btnDescargarPdfGeneral" hidden>Descargar reporte general PDF</button>
+      </div>
+      <p id="estadoListaCursos" class="estado-modulo2" role="status"></p>
+      <div id="listaCursosReportes" class="grid-cursos" aria-live="polite"></div>
+    </section>
+
+    <section class="panel-seccion" id="seccionDetalleCurso" hidden>
+      <div class="encabezado-detalle-reporte">
+        <h2 id="tituloDetalleCurso">Detalle del curso</h2>
+        <div class="acciones-detalle-reporte">
+          <button type="button" class="boton" id="btnDescargarCursoActual">Descargar Excel</button>
+          <button type="button" class="boton secundario" id="btnVolverCursos">Volver a cursos</button>
+        </div>
+      </div>
+      <div class="resumen-curso-reporte" id="resumenCursoReporte"></div>
+      <p id="estadoDetalleCurso" class="estado-modulo2" role="status"></p>
+      <div id="tablaEstudiantesReporte" class="contenedor-tabla-reporte" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="modulo-reportes.js"></script>
+</body>
+</html>
