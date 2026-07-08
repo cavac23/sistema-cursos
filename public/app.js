@@ -289,7 +289,6 @@ async function cargarCursosInscritos() {
         <div class="contenido-tarjeta-curso">
           <p class="etiqueta-curso">${escaparHtmlSimple(ins.nombre_categoria || 'Sin categoría')}</p>
           <h3>${escaparHtmlSimple(ins.titulo)}</h3>
-          <p>${escaparHtmlSimple(ins.descripcion)}</p>
           <div class="tarjeta-inscrito-grupo-progreso">
             <p class="meta-curso"><strong>Instructor:</strong> ${escaparHtmlSimple(ins.instructor)}</p>
             ${crearProgresoTarjetaInscrita(ins)}
@@ -330,9 +329,9 @@ async function cargarCursosDisponiblesEstudiante() {
         <div class="contenido-tarjeta-curso">
           <p class="etiqueta-curso">${escaparHtmlSimple(curso.nombre_categoria || 'Sin categoría')}</p>
           <h3>${escaparHtmlSimple(curso.titulo)}</h3>
-          <p>${escaparHtmlSimple(curso.descripcion)}</p>
+          <p class="resumen-curso">${escaparHtmlSimple(curso.descripcion)}</p>
           <p class="meta-curso"><strong>Instructor:</strong> ${escaparHtmlSimple(curso.instructor)}</p>
-          <a class="boton" href="curso-detalle.html?id=${encodeURIComponent(curso.id_curso)}">Ver detalle</a>
+          <a class="boton boton-catalogo" href="curso-detalle.html?id=${encodeURIComponent(curso.id_curso)}">Ver detalle</a>
         </div>
       </article>
     `).join('');

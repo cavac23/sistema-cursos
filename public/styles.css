@@ -1026,7 +1026,11 @@ body {
   line-height: 1.5;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
+  margin: 0;
   overflow: hidden;
+  overflow-wrap: anywhere;
+  text-overflow: ellipsis;
 }
 
 .boton-catalogo {
@@ -1907,6 +1911,20 @@ body {
 }
 
 /* ===== PROGRESO TARJETA INSCRITO (PANEL ESTUDIANTE) ===== */
+.tarjeta-inscrito {
+  height: 100%;
+}
+
+.tarjeta-inscrito .contenido-tarjeta-curso {
+  gap: 0.4rem;
+  min-height: 0;
+  padding: 0.75rem 0.85rem;
+}
+
+.tarjeta-inscrito .contenido-tarjeta-curso > .meta-curso {
+  margin: 0;
+}
+
 .tarjeta-inscrito-grupo-progreso {
   display: flex;
   flex-direction: column;
