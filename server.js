@@ -20,6 +20,9 @@ const {
 } = require('./middleware/uploadPortada');
 
 const app = express();
+
+// LG_CAVAC: cambio a puerto - este PORT pertenece a la aplicación Express.
+// Render lo asigna automáticamente. En ejecución local se utiliza el puerto 3000.
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({ origin: true, credentials: true }));
@@ -41,6 +44,24 @@ app.use(session({
 const usarConexionWindows = (process.env.DB_TRUSTED_CONNECTION || 'false').toLowerCase() === 'true';
 const dbServer = process.env.DB_SERVER || 'localhost';
 const dbDatabase = process.env.DB_DATABASE || 'SistemaCursos';
+
+// LG_CAVAC: cambio a puerto - puerto predeterminado de SQL Server.
+const DB_DEFAULT_PORT = 1433;
+
+// LG_CAVAC: cambio a puerto - DB_PORT es opcional.
+// Si DB_PORT no existe o está vacío, se utiliza automáticamente el puerto 1433.
+const dbPortTexto = (process.env.DB_PORT || '').trim();
+const dbPortFueConfigurado = dbPortTexto.length > 0;
+const dbPort = dbPortFueConfigurado
+  ? Number(dbPortTexto)
+  : DB_DEFAULT_PORT;
+
+// LG_CAVAC: cambio a puerto - validación para impedir puertos inválidos.
+if (!Number.isInteger(dbPort) || dbPort < 1 || dbPort > 65535) {
+  throw new Error(
+    `DB_PORT debe ser un número entero entre 1 y 65535. Valor recibido: ${process.env.DB_PORT}`
+  );
+}
 
 function cargarDriverSql() {
   if (usarConexionWindows) {
@@ -65,16 +86,50 @@ function cargarDriverSql() {
 }
 
 function parseDbServer(valor) {
-  const [server, instanceName] = valor.split('\\');
+  const valorNormalizado = String(valor || '').trim();
+
+  if (!valorNormalizado) {
+    throw new Error('DB_SERVER no puede estar vacío.');
+  }
+
+  // LG_CAVAC: cambio a puerto - DB_SERVER debe contener solamente el host
+  // o, para una conexión local, HOST\\INSTANCIA. El puerto va en DB_PORT.
+  if (/^[a-z]+:\/\//i.test(valorNormalizado) || valorNormalizado.includes(',')) {
+    throw new Error(
+      'DB_SERVER debe contener solamente el nombre del host, sin protocolo ni puerto. ' +
+      'Ejemplo: l956rcjv1h.localto.net. Configure el puerto por separado en DB_PORT.'
+    );
+  }
+
+  const [server, instanceName] = valorNormalizado.split('\\');
+
   return {
     server: server.trim(),
     instanceName: instanceName ? instanceName.trim() : undefined
   };
 }
 
+// LG_CAVAC: cambio a puerto - construye el destino de SQL Server.
+// Si se definió DB_PORT, el puerto tiene prioridad sobre la instancia nombrada.
+// Si no se definió DB_PORT y DB_SERVER contiene una instancia, se conserva HOST\\INSTANCIA.
+// Si no existe instancia ni DB_PORT, se utiliza HOST,1433.
+function construirDestinoSqlServer(server, instanceName) {
+  if (dbPortFueConfigurado) {
+    return `tcp:${server},${dbPort}`;
+  }
+
+  if (instanceName) {
+    return `${server}\\${instanceName}`;
+  }
+
+  return `tcp:${server},${dbPort}`;
+}
+
 function buildWindowsConnectionString(server, instanceName, database) {
   const driver = process.env.DB_ODBC_DRIVER || 'ODBC Driver 17 for SQL Server';
-  const serverPart = instanceName ? `${server}\\${instanceName}` : server;
+
+  // LG_CAVAC: cambio a puerto - permite DB_PORT y utiliza 1433 por defecto.
+  const serverPart = construirDestinoSqlServer(server, instanceName);
 
   return [
     `Driver={${driver}}`,
@@ -108,7 +163,11 @@ function buildDbConfig() {
       pool
     };
 
-    if (instanceName) {
+    // LG_CAVAC: cambio a puerto - si DB_PORT está definido se usa el puerto.
+    // Si no está definido y existe una instancia nombrada, se conserva instanceName.
+    if (dbPortFueConfigurado || !instanceName) {
+      config.port = dbPort;
+    } else {
       config.options.instanceName = instanceName;
     }
 
@@ -120,12 +179,20 @@ function buildDbConfig() {
     database: dbDatabase,
     options: {
       encrypt: true,
-      trustServerCertificate: true
+      trustServerCertificate: true,
+      enableArithAbort: true
     },
+    connectionTimeout: 30000,
+    requestTimeout: 30000,
     pool
   };
 
-  if (instanceName) {
+  // LG_CAVAC: cambio a puerto - Localtonet requiere host y puerto separados.
+  // Ejemplo: DB_SERVER=l956rcjv1h.localto.net y DB_PORT=1969.
+  // Si DB_PORT no se configura y no hay instancia nombrada, se utiliza 1433.
+  if (dbPortFueConfigurado || !instanceName) {
+    config.port = dbPort;
+  } else {
     config.options.instanceName = instanceName;
   }
 
@@ -144,6 +211,16 @@ function buildDbConfig() {
 
 const sql = cargarDriverSql();
 const dbConfig = buildDbConfig();
+
+// LG_CAVAC: cambio a puerto - log seguro para verificar la conexión sin mostrar la contraseña.
+console.log('Configuración de SQL Server:', {
+  server: dbConfig.server,
+  port: dbConfig.port || null,
+  instanceName: dbConfig.options?.instanceName || null,
+  database: dbConfig.database,
+  trustedConnection: usarConexionWindows,
+  userConfigured: Boolean(dbConfig.user)
+});
 
 function mensajeError(error) {
   if (!error) return 'Error desconocido';
@@ -1499,7 +1576,7 @@ app.patch('/api/lecciones/:id/estado', requiereSesion, requiereRol('instructor')
   }
 });
 
-// ===== M�DULO 3: INSCRIPCIONES =====
+// ===== M DULO 3: INSCRIPCIONES =====
 
 const ROLES_INSCRIPCION = ['usuario', 'estudiante', 'estudiante_itq'];
 
@@ -1652,7 +1729,7 @@ app.get('/api/inscripciones/curso/:idCurso', requiereSesion, async (req, res) =>
   }
 });
 
-// ===== M�DULO 3: PROGRESO DE LECCIONES =====
+// ===== M DULO 3: PROGRESO DE LECCIONES =====
 
 app.patch('/api/lecciones/:idLeccion/progreso', requiereSesion, async (req, res) => {
   try {
@@ -1982,7 +2059,7 @@ app.get('/api/cursos/:idCurso/estudiantes', requiereSesion, requiereRol('instruc
   }
 });
 
-// ===== M�DULO 4: EXÁMENES Y CERTIFICACI�N =====
+// ===== M DULO 4: EXÁMENES Y CERTIFICACI N =====
 
 // --- Instructor: CRUD examen ---
 
@@ -2596,7 +2673,7 @@ app.get('/api/cursos/:idCurso/certificado', requiereSesion, async (req, res) => 
   }
 });
 
-// ===== M�DULO DE REPORTES =====
+// ===== M DULO DE REPORTES =====
 
 async function obtenerCursosReporte(pool, esAdmin, idInstructor) {
   const consulta = `
@@ -2805,7 +2882,7 @@ const NOMBRE_ARCHIVO_EXCEL_PARTICIPANTES = 'Reporte_Participantes_Vinculacion_20
 const NOMBRE_HOJA_EXCEL_PARTICIPANTES = 'Participantes 2026';
 
 function formatearFechaUsuario(valor) {
-  if (!valor) return '�';
+  if (!valor) return ' ';
   const fecha = new Date(valor);
   if (Number.isNaN(fecha.getTime())) return String(valor);
   const dia = String(fecha.getDate()).padStart(2, '0');
@@ -2844,7 +2921,7 @@ function determinarFechaFinalizacion(fechaCertificado, fechaUltimaLeccion, porce
 
 function generarExcelCursos(participantes) {
   const encabezadoInstitucional = [
-    ['INSTITUTO SUPERIOR TECNOL�GICO QUITO'],
+    ['INSTITUTO SUPERIOR TECNOL GICO QUITO'],
     ['Proyecto de Vinculación con la Sociedad 2026'],
     ['Reporte de Participantes'],
     [`Fecha de generación: ${formatearFechaHoraGeneracion()}`],
@@ -2936,7 +3013,7 @@ function generarExcelEstudiantes(curso, estudiantes) {
     'Progreso (%)': est.porcentaje,
     'Lecciones completadas': `${est.completadas}/${est.total_lecciones}`,
     'Estado': est.estado,
-    'Mejor nota': est.mejor_nota !== null ? est.mejor_nota : '�',
+    'Mejor nota': est.mejor_nota !== null ? est.mejor_nota : ' ',
     'Aprobó examen': est.aprobo_examen ? 'Sí' : 'No',
     'Certificado': est.certificado ? 'Sí' : 'No'
   }));
